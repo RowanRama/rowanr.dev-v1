@@ -46,6 +46,33 @@ const StyledHeroSection = styled.section`
   }
 `;
 
+const words = ['Software Engineer', 'Roboticist', 'Entrepreneur'];
+
+const RotatingText = () => {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setIndex(prevIndex => (prevIndex + 1) % words.length);
+    }, 2000); // Changes every 2 seconds
+
+    return () => clearInterval(intervalId); // Cleanup on unmount
+  }, []);
+
+  return (
+    <span
+      style={{
+        display: 'inline-block', // Keeps the span inline
+        width: '150px', // Set a fixed width
+        textAlign: 'center', // Center text within the span
+        whiteSpace: 'nowrap', // Prevents text from wrapping
+        color: '#cc6839',
+      }}>
+      {words[index]}
+    </span>
+  );
+};
+
 const Hero = () => {
   const [isMounted, setIsMounted] = useState(false);
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -60,16 +87,18 @@ const Hero = () => {
   }, []);
 
   const one = <h1>Hi, my name is</h1>;
-  const two = <h2 className="big-heading">Brittany Chiang.</h2>;
-  const three = <h3 className="big-heading">I build things for the web.</h3>;
+  const two = <h2 className="big-heading">Rowan Ramamurthy.</h2>;
+  const three = <h3 className="big-heading">I build Robots.</h3>;
   const four = (
     <>
       <p>
-        I’m a software engineer specializing in building (and occasionally designing) exceptional
-        digital experiences. Currently, I’m focused on building accessible, human-centered products
-        at{' '}
-        <a href="https://upstatement.com/" target="_blank" rel="noreferrer">
-          Upstatement
+        I’m a <RotatingText />, specializing in building AI driven autonomous agents and control
+        systems for any situation. Currently, I’m focused on completing a master's degree at{' '}
+        <a
+          href="https://research.gatech.edu/robotics/ms-robotics-program"
+          target="_blank"
+          rel="noreferrer">
+          Georgia Tech
         </a>
         .
       </p>

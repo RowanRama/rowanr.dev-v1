@@ -2,10 +2,10 @@ const config = require('./src/config');
 
 module.exports = {
   siteMetadata: {
-    title: 'Brittany Chiang',
+    title: 'Rowan Ramamurthy',
     description:
-      'Brittany Chiang is a software engineer who specializes in building (and occasionally designing) exceptional digital experiences.',
-    siteUrl: 'https://brittanychiang.com', // No trailing slash allowed!
+      'Rowan Ramamurthy is a Robotics Engineer with a desire to build AI driven solutions for making life easier.',
+    siteUrl: 'https://rowanr.dev', // No trailing slash allowed!
     image: '/og.png', // Path to your image you placed in the 'static' folder
     twitterUsername: '@bchiang7',
   },
@@ -20,8 +20,8 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: 'Brittany Chiang',
-        short_name: 'Brittany Chiang',
+        name: 'Rowan Ramamurthy',
+        short_name: 'Rowan Ramamurthy',
         start_url: '/',
         background_color: config.colors.darkNavy,
         theme_color: config.colors.navy,
