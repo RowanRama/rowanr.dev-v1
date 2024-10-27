@@ -125,7 +125,7 @@ const About = () => {
     sr.reveal(revealContainer.current, srConfig());
   }, []);
 
-  const skills = ['JavaScript (ES6+)', 'TypeScript', 'React', 'Eleventy', 'Node.js', 'WordPress'];
+  const skills = ['ROS', 'C++', 'C', 'OpenCV', 'Python', 'Pytorch', 'Tensorflow', 'CAD', 'Open3D'];
 
   return (
     <StyledAboutSection id="about" ref={revealContainer}>
@@ -135,30 +135,30 @@ const About = () => {
         <StyledText>
           <div>
             <p>
-              Hello! My name is Brittany and I enjoy creating things that live on the internet. My
-              interest in web development started back in 2012 when I decided to try editing custom
-              Tumblr themes — turns out hacking together a custom reblog button taught me a lot
-              about HTML &amp; CSS!
+              My name is Rowan and I am a full-stack software, mechatronics and robotics engineer 
+              with the aspiration of one day making inexpensive solutions for autonomous agents 
+              and enhancing human capability through technology. My interest in innovation and 
+              problem solving was driven from witnessing the profound impact of technology in 
+              developing communities for solving both existing and unforseen challenges.
             </p>
 
             <p>
-              Fast-forward to today, and I’ve had the privilege of working at{' '}
-              <a href="https://us.mullenlowe.com/">an advertising agency</a>,{' '}
-              <a href="https://starry.com/">a start-up</a>,{' '}
-              <a href="https://www.apple.com/">a huge corporation</a>, and{' '}
-              <a href="https://scout.camd.northeastern.edu/">a student-led design studio</a>. My
-              main focus these days is building accessible, inclusive products and digital
-              experiences at <a href="https://upstatement.com/">Upstatement</a> for a variety of
-              clients.
+              I honed my skills through diverse projects and research during{' '}
+              <a href="https://www.unsw.edu.au/">my undergrad degree</a>,{' '}
+              <a href="https://emesent.com/">a start-up</a>,{' '}
+              <a href="https://www.cirrusrtps.com.au/">a specialised defence contractor</a>, and now {' '}
+              <a href="https://www.gatech.edu/">my grad degree</a>. My
+              experiences have shaped the way I approach and engage in complex engineering challenges
+              , such as developing drones for the DARPA Subterranean Challenge and {' '}
+              algorithmic solutions for feature-based autonomous exploration. My most recent experience{' '}
+              as a software engineer, I was involved in developing advanced simulations and machine {' '}
+              learning models for tactical training applications.
             </p>
 
             <p>
-              I also recently{' '}
-              <a href="https://www.newline.co/courses/build-a-spotify-connected-app">
-                launched a course
-              </a>{' '}
-              that covers everything you need to build a web app with the Spotify API using Node
-              &amp; React.
+              These Roles have equipped me with robost software design skills and a keen understanding{' '}
+              of real world applications. My drive to deepen my knowledge in AI and machine learning draws{' '}
+              me to Georgia Tech and I am eager to see where my journey takes me from here.
             </p>
 
             <p>Here are a few technologies I’ve been working with recently:</p>
