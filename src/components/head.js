@@ -44,12 +44,17 @@ const Head = ({ title, description, image }) => {
 
       <meta name="description" content={seo.description} />
       <meta name="image" content={seo.image} />
+      <meta name="author" content="Rowan Ramamurthy" /> 
+
+      <meta name="keywords" content="software engineer, robotics, entrepreneur, AI development, web development, portfolio" />
 
       <meta property="og:title" content={seo.title} />
       <meta property="og:description" content={seo.description} />
       <meta property="og:image" content={seo.image} />
       <meta property="og:url" content={seo.url} />
       <meta property="og:type" content="website" />
+
+      <link rel="canonical" href="https://rowanr.dev" />
 
       <meta name="google-site-verification" content="N2QfbHY8K-KLX8Ld35vB1M_NK_o2WGXtXfxLMR0YI4c" />
     </Helmet>

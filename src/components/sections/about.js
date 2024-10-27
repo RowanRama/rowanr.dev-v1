@@ -3,6 +3,7 @@ import { StaticImage } from 'gatsby-plugin-image';
 import styled from 'styled-components';
 import { srConfig } from '@config';
 import sr from '@utils/sr';
+import { Icon } from '@components/icons';
 import { usePrefersReducedMotion } from '@hooks';
 
 const StyledAboutSection = styled.section`
@@ -15,6 +16,38 @@ const StyledAboutSection = styled.section`
 
     @media (max-width: 768px) {
       display: block;
+    }
+  }
+
+  .detail {
+    width: 300px;
+    color: var(--dark-gray);
+    margin-top: 30px;
+    font-size: var(--fz-md);
+
+    &__name {
+      color: var(--green);
+      font-weight: 600;
+      font-size: var(--fz-xl);
+      margin-bottom: 5px;
+    }
+
+    &__profession {
+      margin-bottom: 10px;
+    }
+
+    &__item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+
+      svg {
+        width: 20px;
+        height: 20px;
+        /* padding: 10px; */
+        color: var(--light-gray) !important;
+        margin-right: 10px;
+      }
     }
   }
 `;
@@ -125,7 +158,7 @@ const About = () => {
     sr.reveal(revealContainer.current, srConfig());
   }, []);
 
-  const skills = ['ROS', 'C++', 'C', 'OpenCV', 'Python', 'Pytorch', 'Tensorflow', 'CAD', 'Open3D'];
+  const skills = ['ROS', 'C++', 'C', 'Python', 'Assembly', 'OpenCV', 'Pytorch', 'Tensorflow', 'CAD', 'Open3D'];
 
   return (
     <StyledAboutSection id="about" ref={revealContainer}>
@@ -156,7 +189,7 @@ const About = () => {
             </p>
 
             <p>
-              These Roles have equipped me with robost software design skills and a keen understanding{' '}
+              These roles have equipped me with robost software design skills and a keen understanding{' '}
               of real world applications. My drive to deepen my knowledge in AI and machine learning draws{' '}
               me to Georgia Tech and I am eager to see where my journey takes me from here.
             </p>
@@ -179,6 +212,22 @@ const About = () => {
               formats={['AUTO', 'WEBP', 'AVIF']}
               alt="Headshot"
             />
+          </div>
+          <div className="detail">
+            <p className="detail__name">Rowan Ramamurthy</p>
+            <p className="detail__profession">Robotics Engineer</p>
+            <div className="detail__item">
+              <Icon className="detail__item__icon" name="Job" />
+              <p className="detail__item__text">Grad Student @ Georgia Tech</p>
+            </div>
+            <div className="detail__item">
+              <Icon className="detail__item__icon" name="Location" />
+              <p className="detail__item__text">Atlanta, GA</p>
+            </div>
+            <div className="detail__item">
+              <Icon className="detail__item__icon" name="Inbox" />
+              <p className="detail__item__text">rowrama99@gmail.com</p>
+            </div>
           </div>
         </StyledPic>
       </div>

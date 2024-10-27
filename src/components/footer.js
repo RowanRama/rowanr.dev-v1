@@ -85,8 +85,15 @@ const Footer = () => {
 
       <StyledCredit tabindex="-1">
         <a href="https://github.com/bchiang7/v4">
-          <div>Template Design by Brittany Chaing</div>
+          <div>Inspired by Brittany Chiang</div>
         </a>
+        <div className="copy">
+        <span style={{ fontSize: '1rem', marginRight: '5px' }}>&copy;</span> Rowan Ramamurthy{' '}
+        <span style={{ fontSize: '.5rem', color: 'var(--light-gray)', margin: '0px 5px' }}>
+          &bull;
+        </span>{' '}
+        2024
+      </div>
       </StyledCredit>
     </StyledFooter>
   );
