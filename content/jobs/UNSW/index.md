@@ -1,10 +1,10 @@
 ---
-date: '2017-12-21'
+date: '2021-12-06'
 title: 'UI Engineer Co-op'
-company: 'Apple'
-location: 'Cupertino, CA'
-range: 'July - December 2017'
-url: 'https://www.apple.com/music/'
+company: 'UNSW'
+location: 'Sydeny, NSW, Australia'
+range: 'February 2019 - December 2021'
+url: 'https://www.unsw.edu.au/'
 ---
 
 - Developed and styled interactive web applications for Apple Music using Ember and SCSS

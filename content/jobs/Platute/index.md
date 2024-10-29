@@ -1,13 +1,12 @@
 ---
-date: '2017-12-21'
-title: 'UI Engineer Co-op'
-company: 'Apple'
-location: 'Cupertino, CA'
-range: 'July - December 2017'
-url: 'https://www.apple.com/music/'
+date: '2022-02-12'
+title: 'Private Tutor'
+company: 'Platute'
+location: 'Sydeny, NSW, Australia'
+range: 'May 2020 - February 2022'
+url: 'https://platute.com/'
 ---
 
-- Developed and styled interactive web applications for Apple Music using Ember and SCSS
-- Built and shipped the Apple Music Extension for Facebook Messenger leveraging third-party and internal API integrations
-- Architected and implemented the user interface of Apple Music's embeddable web player widget for in-browser user authorization and full song playback
-- Contributed extensively to the creation of MusicKit JS, a public-facing JavaScript SDK for embedding Apple Music players into web applications
+- Tutored 50 students for over 300 hours from undergraduate to masters level in computer science and mechatronics at universities around Australia.
+- Assisted students with subjects ranging from introductory programming to networking, parallel processing and environmental exploration.
+- Guided development of solutions for problems in Python, C++, C and Java coding

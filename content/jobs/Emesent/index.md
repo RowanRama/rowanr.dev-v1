@@ -1,13 +1,12 @@
 ---
-date: '2017-12-21'
-title: 'UI Engineer Co-op'
+date: '2021-02-20'
+title: 'Robotics Engineer'
 company: 'Emesent'
-location: 'Cupertino, CA'
-range: 'July - December 2017'
-url: 'https://www.apple.com/music/'
+location: 'Brisbane, QLD, Australia'
+range: 'December 2019 - February 2020'
+url: 'https://emesent.com/'
 ---
 
-- Developed and styled interactive web applications for Apple Music using Ember and SCSS
-- Built and shipped the Apple Music Extension for Facebook Messenger leveraging third-party and internal API integrations
-- Architected and implemented the user interface of Apple Music's embeddable web player widget for in-browser user authorization and full song playback
-- Contributed extensively to the creation of MusicKit JS, a public-facing JavaScript SDK for embedding Apple Music players into web applications
+- Developed the Perception team’s hardware and software solution for independent scanning of the surrounding environment using a custom gimbal and payload to be compatible with the DJI top mounting bracket.
+- Successfully developed a system which performed object detection of features and environment scanning in low light and high light environments during the DARPA Subterranean Challenge
+- Developed a series of software APIs for custom control of the gimbal system through ROS and for custom configuration of the FLIR Blackfly S camera.
