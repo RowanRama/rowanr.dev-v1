@@ -2,6 +2,7 @@
 date: '2024-07-01'
 title: 'Software Engineer'
 company: 'Cirrus RTPS'
+company_long: 'Cirrus Realtime Processing Systems'
 location: 'Sydney, NSW, Australia'
 range: 'February 2022 - July 2024'
 url: 'https://www.cirrusrtps.com.au/'
