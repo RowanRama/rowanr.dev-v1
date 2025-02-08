@@ -92,7 +92,7 @@ const Footer = () => {
         <span style={{ fontSize: '.5rem', color: 'var(--light-gray)', margin: '0px 5px' }}>
           &bull;
         </span>{' '}
-        2024
+        2025
       </div>
       </StyledCredit>
     </StyledFooter>

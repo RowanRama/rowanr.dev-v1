@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { graphql } from 'gatsby';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
@@ -136,6 +136,8 @@ const ArchivePage = ({ location, data }) => {
   const revealProjects = useRef([]);
   const prefersReducedMotion = usePrefersReducedMotion();
 
+  const [expandedRow, setExpandedRow] = useState(null);
+
   useEffect(() => {
     if (prefersReducedMotion) {
       return;
@@ -145,6 +147,10 @@ const ArchivePage = ({ location, data }) => {
     sr.reveal(revealTable.current, srConfig(200, 0));
     revealProjects.current.forEach((ref, i) => sr.reveal(ref, srConfig(i * 10)));
   }, []);
+
+  const handleRowClick = (index) => {
+    setExpandedRow(expandedRow === index ? null : index);
+  }
 
   return (
     <Layout location={location}>
@@ -178,8 +184,12 @@ const ArchivePage = ({ location, data }) => {
                     tech,
                     company,
                   } = node.frontmatter;
+
+                  const isExpanded = expandedRow === i;
+
                   return (
-                    <tr key={i} ref={el => (revealProjects.current[i] = el)}>
+                    <React.Fragment key={i}>
+                    <tr onClick={() => handleRowClick(i)} key={i} ref={el => (revealProjects.current[i] = el)}>
                       <td className="overline year">{`${new Date(date).getFullYear()}`}</td>
 
                       <td className="title">{title}</td>
@@ -214,6 +224,14 @@ const ArchivePage = ({ location, data }) => {
                         </div>
                       </td>
                     </tr>
+                    {isExpanded && (
+                      <tr>
+                        <td colSpan="5">
+                          <div dangerouslySetInnerHTML={{ __html: node.html }} />
+                        </td>
+                      </tr>
+                    )}
+                    </React.Fragment>
                   );
                 })}
             </tbody>
