@@ -1,6 +1,6 @@
 ---
 date: '2018-09-01'
-title: 'Virtual Memory Emulator
+title: 'Virtual Memory Emulator'
 github: ''
 external: ''
 tech:
