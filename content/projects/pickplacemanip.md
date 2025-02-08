@@ -1,5 +1,5 @@
 ---
-date: '2024-09-01'
+date: '2020-09-01'
 title: 'Pick-and-Place Manipulator'
 github: ''
 external: ''
