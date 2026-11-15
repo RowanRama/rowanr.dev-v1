@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Rowan Ramamurthy, robotics engineer: multi-robot planning</title>
+    <meta
+      name="description"
+      content="Robotics engineer Rowan Ramamurthy builds software that lets robots share work: multi-arm task allocation, drones and PLC tooling. Drive an AMR up the timeline."
+    />
+    <link rel="canonical" href="https://rowanr.dev/" />
+    <meta name="theme-color" content="#0f1b24" />
+    <meta property="og:type" content="profile" />
+    <meta property="og:site_name" content="Rowan Ramamurthy" />
+    <meta property="og:url" content="https://rowanr.dev/" />
+    <meta property="og:title" content="Rowan Ramamurthy, robotics engineer" />
+    <meta property="og:description" content="Drive an AMR up a mountain through my timeline: multi-arm task allocation, drones and the tools around them." />
+    <meta property="og:image" content="https://rowanr.dev/og.jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="A low-poly island at dusk with a spiral road up a snowy mountain and a glowing ring in the sky" />
+    <meta property="profile:first_name" content="Rowan" />
+    <meta property="profile:last_name" content="Ramamurthy" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="me" href="https://github.com/RowanRama" />
+    <link rel="me" href="https://www.linkedin.com/in/rowanramamurthy/" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ProfilePage",
+        "url": "https://rowanr.dev/",
+        "name": "Rowan Ramamurthy, robotics engineer",
+        "dateModified": "2026-11-14",
+        "mainEntity": {
+          "@type": "Person",
+          "@id": "https://rowanr.dev/#rowan",
+          "name": "Rowan Ramamurthy",
+          "jobTitle": "Robotics engineer",
+          "url": "https://rowanr.dev/",
+          "image": "https://rowanr.dev/og.jpeg",
+          "email": "mailto:rowrama99@gmail.com",
+          "sameAs": ["https://github.com/RowanRama", "https://www.linkedin.com/in/rowanramamurthy/"],
+          "alumniOf": [
+            { "@type": "CollegeOrUniversity", "name": "UNSW Sydney", "url": "https://www.unsw.edu.au/" },
+            { "@type": "CollegeOrUniversity", "name": "Georgia Institute of Technology", "url": "https://www.gatech.edu/" }
+          ],
+          "hasCredential": [
+            { "@type": "EducationalOccupationalCredential", "name": "Master of Science in Robotics", "credentialCategory": "degree", "recognizedBy": { "@type": "CollegeOrUniversity", "name": "Georgia Institute of Technology" } },
+            { "@type": "EducationalOccupationalCredential", "name": "Bachelor of Engineering (Mechatronics), Honours Class I", "credentialCategory": "degree", "recognizedBy": { "@type": "CollegeOrUniversity", "name": "UNSW Sydney" } },
+            { "@type": "EducationalOccupationalCredential", "name": "Bachelor of Science (Computer Science)", "credentialCategory": "degree", "recognizedBy": { "@type": "CollegeOrUniversity", "name": "UNSW Sydney" } }
+          ],
+          "knowsAbout": ["Multi-robot task allocation", "Robot motion planning", "ROS 2", "Reinforcement learning", "SLAM", "Real-time simulation", "EtherNet/IP", "C++", "Rust", "Python"]
+        }
+      }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- loaded without blocking the first paint; the faces swap in when ready -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media = 'all'"
+    />
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+    </noscript>
+    <script type="module" src="/src/main.ts"></script>
+  </head>
+  <body>
+    <a class="skip-link visually-hidden" href="#stations">Skip to content</a>
+
+    <header class="hud-top" aria-label="Site">
+      <div class="brand">
+        <p class="brand-name">Rowan Ramamurthy</p>
+        <p class="brand-role">Robotics engineer</p>
+      </div>
+      <nav class="timeline" aria-label="Timeline stops" hidden></nav>
+      <div class="hud-actions">
+        <button type="button" class="btn" id="mode-toggle" hidden>Tour mode</button>
+        <button type="button" class="btn" id="text-toggle" aria-pressed="false" hidden>Text version</button>
+      </div>
+    </header>
+
+    <div id="world" aria-hidden="true"></div>
+    <div id="scroll-track" aria-hidden="true"></div>
+
+    <div class="hud-bottom" aria-hidden="true" hidden>
+      <canvas id="minimap" width="320" height="320"></canvas>
+      <p class="hint" id="hint">WASD to drive, Shift to boost, drag to look around</p>
+    </div>
+    <div id="joystick" aria-hidden="true" hidden><span></span></div>
+    <p class="loading" id="loading" hidden>Building the island</p>
+
+    <main id="stations">
+      <article id="intro" data-station="intro" data-sign="Start here" data-kind="chapter">
+        <h1>Hi, I’m Rowan Ramamurthy.</h1>
+        <p>
+          I build software that lets robots share work: multi-arm planners, drones and the
+          tools that tie them to real machines.
+        </p>
+        <p class="drive-only">
+          This island is my timeline. Drive the AMR up the mountain, one stop per chapter. Or
+          use the dots up top to jump ahead.
+        </p>
+        <p class="tour-only">This island is my timeline. Scroll to drive the AMR up the mountain.</p>
+        <p>
+          Off the clock I’m usually outside. Keep an eye out around the island for what I get up to;
+          the AMR can even drive the seabed.
+        </p>
+      </article>
+
+      <article id="unsw" data-station="unsw" data-sign="2017 UNSW" data-kind="chapter">
+        <p class="year">2017 to 2021</p>
+        <h2>UNSW Sydney</h2>
+        <ul>
+          <li>Bachelor of Engineering, Mechatronics, Honours Class I</li>
+          <li>Bachelor of Science, Computer Science</li>
+        </ul>
+        <p>
+          Control systems, autonomous navigation, computer vision, operating systems. Built an
+          EKF SLAM, a UR5 pick-and-place cell with vision, and a C compiler along the way.
+        </p>
+        <p>
+          Plus a reef restoration team project: an engineered approach to coral seeding on the
+          Great Barrier Reef, with a business plan to match.
+        </p>
+      </article>
+
+      <article id="rover" data-station="rover" data-sign="2019 Mars rover" data-kind="chapter">
+        <p class="year">2019 to 2020</p>
+        <h2>Student Mars rover</h2>
+        <p>
+          Software for BLUEsat’s autonomous model Mars rover in the Off World Robotics
+          competition. I integrated lidar SLAM for mapping and learned how ROS systems fit
+          together across separate teams.
+        </p>
+      </article>
+
+      <article id="subt" data-station="subt" data-sign="2019 DARPA SubT" data-kind="chapter">
+        <p class="year">2019 to 2021</p>
+        <h2>Drones underground</h2>
+        <p>
+          A top-mounted gimbal payload for the DARPA Subterranean Challenge: scanning and object
+          detection in dark tunnels, independent of the drone’s own autonomy. Later, a 3-axis
+          gimbal and light model in Gazebo and a port of the stack to the virtual challenge.
+        </p>
+        <p class="tags">C++, ROS, Gazebo, embedded control, CAD</p>
+      </article>
+
+      <article id="thesis" data-station="thesis" data-sign="2021 Thesis" data-kind="chapter">
+        <p class="year">2021</p>
+        <h2>Honours thesis: finding what matters</h2>
+        <p>
+          An autonomous exploration framework that ranks features by how likely they are to be
+          the point of the mission. Tested on partly explored telecom towers, it steers the drone
+          to maximise point cloud density and completion where it counts.
+        </p>
+        <p class="tags">Python, C++, Open3D, SLAM</p>
+        <p><a href="https://github.com/RowanRama/3D_classification">Code on GitHub</a></p>
+      </article>
+
+
+      <article id="sim" data-station="sim" data-sign="2022 Simulation" data-kind="chapter">
+        <p class="year">2022 to 2024</p>
+        <h2>Defence training simulators</h2>
+        <p>
+          Cirrus Real Time Processing Systems in Sydney builds the simulators Australian Navy and
+          Air Force crews train on: tactical electronic warfare, the air combat officer trainer
+          flown out of RAAF East Sale, and submarine and mine hunting trainers.
+        </p>
+        <p>
+          I wrote real-time simulation in C++ and C#. The highlight: an electromagnetic propagation
+          model that predicts over-the-horizon coverage when signals duct through the atmosphere,
+          with custom atmospheric profiles.
+        </p>
+        <p class="tags">C++, C#, real-time simulation, RF propagation</p>
+      </article>
+
+      <article id="gatech" data-station="gatech" data-sign="2024 Georgia Tech" data-kind="chapter">
+        <p class="year">2024 to 2026</p>
+        <h2>Georgia Tech</h2>
+        <p>Master of Science in Robotics, Atlanta.</p>
+        <p>
+          Deep reinforcement learning, multi-agent systems, manipulator mechanics and computer
+          vision, plus a stint as a graduate teaching assistant.
+        </p>
+      </article>
+
+      <article id="hands" data-station="hands" data-sign="2025 HANDS" data-kind="chapter">
+        <p class="year">2025</p>
+        <h2>HANDS: a soft hand that learns</h2>
+        <p>
+          Hierarchical reinforcement learning for tendon-driven soft fingers in PyElastica. Each
+          finger has its own low-level policy; a higher-level agent coordinates them to move an
+          object.
+        </p>
+        <p><a href="https://github.com/RowanRama/HANDS">Code on GitHub</a></p>
+      </article>
+
+
+      <article id="ampf" data-station="ampf" data-sign="2025 AMPF research" data-kind="chapter" data-wide>
+        <p class="year">2025 to 2026</p>
+        <h2>Multi-agent task allocation</h2>
+        <p>
+          My master’s research at Georgia Tech’s Advanced Manufacturing Pilot Facility: splitting
+          one toolpath between several robot arms without them colliding.
+        </p>
+        <div class="demo" hidden>
+          <canvas class="gantt" width="720" height="200" role="img" aria-label="Live schedule: one row per arm, one bar per contour"></canvas>
+          <div class="demo-actions">
+            <button type="button" class="btn" data-demo="drop">Take arm B offline</button>
+            <button type="button" class="btn" data-demo="reset">Restart job</button>
+          </div>
+        </div>
+        <p>
+          The G-code is cut into contours with a layer dependency graph. Each free arm claims the
+          best available contour; a cached ellipsoid prefilter with a reach check, and a learned
+          pairwise model, skip most of the expensive collision checks. If an arm drops out mid-job,
+          the schedule replans around it.
+        </p>
+        <p>
+          On the bench: two Tormach ZA6 arms on pedestals, drawing on a whiteboard level with
+          their bases. The cell here runs the same idea live.
+        </p>
+        <p class="tags">Python, ROS 2, PyTorch, python-fcl, MuJoCo</p>
+        <p>
+          <a href="https://github.com/RowanRama/pyrobopath/tree/dev">pyrobopath fork</a> and
+          <a href="https://github.com/RowanRama/PairwiseCollisionNet">PairwiseCollisionNet</a>
+        </p>
+      </article>
+
+      <article id="workshop" data-station="workshop" data-sign="2026 Workshop" data-kind="chapter">
+        <p class="year">2026</p>
+        <h2>The workshop</h2>
+        <ul>
+          <li>
+            <a href="https://github.com/RowanRama/ciplink">ciplink</a>: read and write
+            Allen-Bradley PLC tags over EtherNet/IP from Rust, Python, C, C++ and C#.
+          </li>
+          <li>
+            <a href="https://github.com/RowanRama/img2gcode">img2gcode</a>: images, SVGs and text
+            into plotter toolpaths, with a desktop GUI.
+          </li>
+          <li>A games night platform and a live trading competition for friends.</li>
+        </ul>
+      </article>
+
+      <!-- Each item is also a billboard beside the road; data-u is where along the road (0 to 1). -->
+      <article id="work" data-station="work">
+        <h2>Where I’ve worked</h2>
+        <ul class="jobs">
+          <li data-billboard data-u="0.135" data-color="#5aa8ff">
+            <strong class="org">BLUEsat UNSW</strong>, <span class="role">Robotics engineer</span>,
+            <span class="dates">2019 to 2020</span>.
+            <span class="what">Autonomy and lidar SLAM for a student Mars rover.</span>
+          </li>
+          <li data-billboard data-u="0.21" data-color="#ff7a1a">
+            <strong class="org">Emesent</strong>, <span class="role">Robotics engineer</span>,
+            <span class="dates">2019 to 2021</span>.
+            <span class="what">Perception gimbal and simulation for the DARPA Subterranean Challenge.</span>
+          </li>
+          <li data-billboard data-u="0.275" data-color="#51cf66">
+            <strong class="org">Platute</strong>, <span class="role">Private tutor</span>,
+            <span class="dates">2020 to 2022</span>.
+            <span class="what">50 students, over 300 hours of computer science and mechatronics.</span>
+          </li>
+          <li data-billboard data-u="0.365" data-color="#5fd4c4">
+            <strong class="org">Cirrus RTPS</strong>, <span class="role">Software engineer</span>,
+            <span class="dates">2022 to 2024</span>.
+            <span class="what">Navy and Air Force training simulators: electronic warfare, air combat officer and submarine trainers.</span>
+          </li>
+          <li data-billboard data-u="0.535" data-color="#c9a227">
+            <strong class="org">Georgia Tech</strong>, <span class="role">Graduate teaching assistant</span>,
+            <span class="dates">from 2025</span>.
+            <span class="what">Teaching alongside the robotics master’s.</span>
+          </li>
+          <li data-billboard data-u="0.655" data-color="#ffb347">
+            <strong class="org">AMPF, Georgia Tech</strong>,
+            <span class="role">Graduate research assistant</span>, <span class="dates">2025 to 2026</span>.
+            <span class="what">Robot automation for hybrid additive and subtractive manufacturing.</span>
+          </li>
+        </ul>
+      </article>
+
+      <article id="summit" data-station="summit" data-sign="Summit" data-kind="chapter">
+        <h2>You made it to the top.</h2>
+        <p>I’m always up for talking robots, planners or a good line down a mountain.</p>
+        <ul class="links">
+          <li><a href="mailto:rowrama99@gmail.com">rowrama99@gmail.com</a></li>
+          <li><a href="https://github.com/RowanRama">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/rowanramamurthy/">LinkedIn</a></li>
+        </ul>
+      </article>
+    </main>
+
+    <noscript><style>.hud-top .hud-actions { display: none; }</style></noscript>
+  </body>
+</html>

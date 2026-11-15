@@ -1,0 +1,25 @@
+# Rowan Ramamurthy
+
+> Robotics engineer who builds software that lets robots share work: multi-arm task allocation, drones and the tools that tie them to real machines. The site at https://rowanr.dev/ is a 3D island you drive an AMR around; every word of it is also plain HTML on that one page.
+
+## Timeline
+
+- 2017 to 2021, UNSW Sydney: Bachelor of Engineering (Mechatronics, Honours Class I) and Bachelor of Science (Computer Science).
+- 2019 to 2020, BLUEsat UNSW: autonomy and lidar SLAM for a student Mars rover.
+- 2019 to 2021, Emesent: perception gimbal payload and simulation for the DARPA Subterranean Challenge.
+- 2021, honours thesis: autonomous exploration that steers a drone toward the features that matter ([code](https://github.com/RowanRama/3D_classification)).
+- 2022 to 2024, Cirrus Real Time Processing Systems, Sydney: Navy and Air Force training simulators in C++ and C#, including an electromagnetic propagation model for atmospheric ducting.
+- 2024 to 2026, Georgia Tech: Master of Science in Robotics, and graduate teaching assistant.
+- 2025, HANDS: hierarchical reinforcement learning for tendon-driven soft fingers ([code](https://github.com/RowanRama/HANDS)).
+- 2025 to 2026, AMPF, Georgia Tech: multi-agent task allocation that splits one toolpath between several robot arms without collisions ([pyrobopath fork](https://github.com/RowanRama/pyrobopath/tree/dev), [PairwiseCollisionNet](https://github.com/RowanRama/PairwiseCollisionNet)).
+
+## Projects
+
+- [ciplink](https://github.com/RowanRama/ciplink): read and write Allen-Bradley PLC tags over EtherNet/IP from Rust, Python, C, C++ and C#.
+- [img2gcode](https://github.com/RowanRama/img2gcode): images, SVGs and text into plotter toolpaths, with a desktop GUI.
+
+## Contact
+
+- Email: rowrama99@gmail.com
+- [GitHub](https://github.com/RowanRama)
+- [LinkedIn](https://www.linkedin.com/in/rowanramamurthy/)

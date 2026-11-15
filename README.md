@@ -1,83 +1,38 @@
-<div align="center">
-  <img alt="Logo" src="https://raw.githubusercontent.com/RowanRama/rowanr.dev-v1/main/src/images/logo.png" width="100" />
-</div>
-<h1 align="center">
-  rowanr.dev - V1
-</h1>
-<p align="center">
-  The first iteration of <a href="https://rowanr.dev" target="_blank">rowanr.dev</a> built with <a href="https://www.gatsbyjs.org/" target="_blank">Gatsby</a> and hosted with <a href="https://www.netlify.com/" target="_blank">Netlify</a>
-</p>
-<p align="center">
-  <a href="https://app.netlify.com/sites/brittanychiang/deploys" target="_blank">
-    <img src="https://api.netlify.com/api/v1/badges/1963b488-7b78-48c9-9e2d-6fb5e47ab3af/deploy-status" alt="Netlify Status" />
-  </a>
-</p>
+# rowanr.dev v2
 
-![demo](https://raw.githubusercontent.com/RowanRama/rowanr.dev-v1/main/src/images/demo.png)
+A static portfolio you drive: an AMR with an industrial arm on top climbs a spiral road up an island mountain, one stop per chapter of the timeline. Interests (diving, soccer, hiking, climbing, skiing) are scattered around the island as scenery.
 
-## 🚨 Forking this repo (please read!)
+- Desktop: WASD or arrow keys to drive, Shift to boost, hold the left or right mouse button and drag to look around. The dots in the header jump to a stop.
+- Phones and tablets: scrolling moves the AMR along the road (Drive mode adds an on-screen stick).
+- Text version: the button in the header, or automatically when WebGL is missing. All content lives as plain HTML in `index.html`, so it also reads fine with scripts off.
 
-This repo has been adapted from Brittany Chiang. Please fork the the original repo created by her since that is where the credit is due.
+## Run
 
-Many people have contacted me asking me if they can use this code for their own website, and the answer to that question is usually **yes, with attribution**.
+```sh
+npm install
+npm run dev      # http://localhost:5173
+npm run build    # type-checks, then writes dist/
+npm run preview  # serves dist/
+```
 
-I value keeping my site open source, but as you all know, _**plagiarism is bad**_. It's always disheartening whenever I find that someone has copied my site without giving me credit. I spent a non-trivial amount of effort building and designing this iteration of my website, and I am proud of it! All I ask of you all is to not claim this effort as your own.
+## Deploy
 
-Please also note that I did not build this site with the intention of it being a starter theme, so if you have questions about implementation, please refer to the [Gatsby docs](https://www.gatsbyjs.org/docs/).
+Static files in `dist/`. `netlify.toml` already sets the build command and publish folder; point the rowanr.dev site at this repo.
 
-### TL;DR
+## Where things are
 
-Yes, you can fork this repo. Please give me proper credit by linking back to [brittanychiang.com](https://brittanychiang.com). Thanks!
+| File | What it does |
+| --- | --- |
+| `index.html` | Every station's text, as `<article data-station="...">` |
+| `src/world.ts` | Island height field, spiral road, water, sky, trees |
+| `src/stations.ts` | Each stop and scenery piece, and where it sits (`DEFS`) |
+| `src/ampf.ts` | The live multi-arm planner: contours, greedy allocation, prefilter, replanning, Gantt |
+| `src/models.ts` | Procedural models: six-axis arm with IK, AMR, drones, rover, people, signs |
+| `src/main.ts` | Entry: WebGL check, text version toggle, loads `game.ts` only when the 3D view is used |
+| `src/game.ts` | Renderer, scene, main loop, modes, camera framing |
+| `src/player.ts` | Driving, terrain tilt, colliders, cameras |
+| `src/hud.ts` | Timeline dots, minimap, input, scroll tour |
+| `src/fleet.ts` | Frigates, a submarine, a helicopter and aircraft offshore from the simulation stop |
+| `src/roadside.ts` | Job billboards (from the `data-billboard` list in `index.html`) and year markers |
 
-## 🛠 Installation & Set Up
-
-1. Install the Gatsby CLI
-
-   ```sh
-   npm install -g gatsby-cli
-   ```
-
-2. Install and use the correct version of Node using [NVM](https://github.com/nvm-sh/nvm)
-
-   ```sh
-   nvm install
-   ```
-
-3. Install dependencies
-
-   ```sh
-   yarn
-   ```
-
-4. Start the development server
-
-   ```sh
-   npm start
-   ```
-
-## 🚀 Building and Running for Production
-
-1. Generate a full static production build
-
-   ```sh
-   npm run build
-   ```
-
-1. Preview the site as it will appear once deployed
-
-   ```sh
-   npm run serve
-   ```
-
-## 🎨 Color Reference
-
-| Color          | Hex                                                                |
-| -------------- | ------------------------------------------------------------------ |
-| Navy           | ![#0a192f](https://via.placeholder.com/10/0a192f?text=+) `#0a192f` |
-| Light Navy     | ![#112240](https://via.placeholder.com/10/0a192f?text=+) `#112240` |
-| Lightest Navy  | ![#233554](https://via.placeholder.com/10/303C55?text=+) `#233554` |
-| Slate          | ![#8892b0](https://via.placeholder.com/10/8892b0?text=+) `#8892b0` |
-| Light Slate    | ![#a8b2d1](https://via.placeholder.com/10/a8b2d1?text=+) `#a8b2d1` |
-| Lightest Slate | ![#ccd6f6](https://via.placeholder.com/10/ccd6f6?text=+) `#ccd6f6` |
-| White          | ![#e6f1ff](https://via.placeholder.com/10/e6f1ff?text=+) `#e6f1ff` |
-| Green          | ![#cc6839](https://via.placeholder.com/10/cc6839?text=+) `#cc6839` |
+To add a stop: add an `<article data-station="id" data-sign="Sign text">` to `index.html` and a matching entry in `DEFS` with a `u` (0 to 1 along the road) and a build function.

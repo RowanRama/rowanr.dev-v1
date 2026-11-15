@@ -1,0 +1,45 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# the v1 Gatsby site pinned Node 14 (in .nvmrc and maybe the Netlify UI); Vite needs 20+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Pages from the old Gatsby site, so old links and search results land on the new home page
+[[redirects]]
+  from = "/archive"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/pensieve/*"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/pensieve"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/resume.pdf"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/og.png"
+  to = "/og.jpeg"
+  status = 301
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "DENY"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
