@@ -5,6 +5,8 @@
 # the v1 Gatsby site pinned Node 14 (in .nvmrc and maybe the Netlify UI); Vite needs 20+
 [build.environment]
   NODE_VERSION = "22"
+  # the Gatsby plugin from v1 is still installed on the Netlify site; this makes it do nothing
+  NETLIFY_SKIP_GATSBY_BUILD_PLUGIN = "true"
 
 # Pages from the old Gatsby site, so old links and search results land on the new home page
 [[redirects]]
