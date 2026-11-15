@@ -3,6 +3,7 @@ import { createHud, createInput, createScrollTour, readArticles, type Mode } fro
 import { createCameraRig, createPlayer } from './player';
 import { buildRoadside } from './roadside';
 import { buildFleet } from './fleet';
+import { buildHeritage, heritagePads } from './heritage';
 import { buildStations, stationPads, type Station } from './stations';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
@@ -65,11 +66,13 @@ export async function startGame() {
   scene.add(sun, sun.target);
 
   const articles = readArticles();
-  const world = buildWorld(scene, stationPads());
+  const world = buildWorld(scene, [...stationPads(), ...heritagePads()]);
   const stations = buildStations(scene, articles);
   const stops = stations.filter((s) => s.onTimeline);
   const colliders = [...stations.flatMap((s) => s.colliders), ...buildRoadside(scene)];
   const fleet = buildFleet(scene);
+  const heritage = buildHeritage(scene);
+  colliders.push(...heritage.colliders);
   const player = createPlayer(scene, colliders);
   const rig = createCameraRig(camera);
   const tour = createScrollTour(stops);
@@ -176,7 +179,8 @@ export async function startGame() {
   renderer.setAnimationLoop((now) => {
     timer.update(now);
     if (root.classList.contains('text-mode')) return;
-    const dt = Math.min(0.05, timer.getDelta());
+    // the first frames can report a negative delta (rAF timestamps start before the timer), so clamp at 0
+    const dt = Math.max(0, Math.min(0.05, timer.getDelta()));
     const ambient = reduceMotion.matches ? 0.35 : 1;
     time += dt * ambient;
 
@@ -212,6 +216,7 @@ export async function startGame() {
     player.animateArm(dt, time, near ? lookAt.copy(near.group.position).setY(near.group.position.y + 3) : null);
     world.update(dt * ambient);
     fleet.update(dt * ambient, time);
+    heritage.update(dt * ambient, time);
 
     // parked at a stop: frame the AMR and the station together
     idle = Math.abs(player.state.v) < 0.6 ? idle + dt : 0;

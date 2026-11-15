@@ -1,6 +1,6 @@
 # rowanr.dev
 
-My portfolio, as a game. You drive an AMR with an industrial arm on top up a spiral road around an island mountain, and each stop is a chapter of my timeline: studies, research, projects and the places I've worked. Interests sit around the island as unlabelled scenery, waiting to be found.
+My portfolio, as a game. You drive an AMR with an industrial arm on top up a spiral road around an island mountain, and each stop is a chapter of my timeline: studies, research, projects and the places I've worked. Interests and other scenery sit around the island unlabelled, waiting to be found.
 
 Live at [rowanr.dev](https://rowanr.dev/).
 
@@ -41,9 +41,10 @@ npm run preview  # serves dist/
 | `index.html` | Every stop's text as `<article data-station="...">`, the job list behind the billboards, and the page's metadata and structured data |
 | `src/main.ts` | Entry: WebGL check, the text version toggle, and loading `game.ts` only when the 3D view is used |
 | `src/game.ts` | Renderer, bloom, lighting, the main loop, modes and camera framing |
-| `src/world.ts` | Island height field, spiral road, water, dusk sky, trees, the orbital ring and the summit beam |
+| `src/world.ts` | Island height field, biomes (outback, gum forest, PNG rainforest), spiral road, water, dusk sky, trees, the orbital ring and the summit beam |
 | `src/stations.ts` | Each stop and scenery piece, and where it sits (`DEFS`) |
 | `src/roadside.ts` | Hologram job billboards, year signs and the light posts along the road |
+| `src/heritage.ts` | Scenery for the outback, gum forest, rainforest, coast and meadow: animals, buildings and a cricket match |
 | `src/fleet.ts` | Frigates, a submarine, a helicopter and aircraft offshore from the 2022 simulation stop |
 | `src/ampf.ts` | The live multi-arm planner: contours, greedy allocation, prefilter, replanning and the Gantt chart |
 | `src/models.ts` | Shared models: the six-axis arm with IK, the AMR, drones, the rover, people and stop signs |

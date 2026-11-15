@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 
 // Island: a ring of beach, one mountain in the middle, a spiral road up to the summit.
 export const SIZE = 460; // terrain square, world units
@@ -48,6 +49,22 @@ function rough(x: number, z: number) {
 
 /** Terrain height before the road and pads are carved in. */
 export const baseHeight = (x: number, z: number) => shape(Math.hypot(x, z)) + rough(x, z);
+
+// ---------- biomes ----------
+// Australian outback and gum forest on one side of the mountain, Papua New Guinea rainforest on the other.
+export type Biome = 'outback' | 'gum' | 'rainforest' | 'meadow';
+export function biomeAt(x: number, z: number): Biome {
+  const r = Math.hypot(x, z);
+  if (r < 22) return 'meadow';
+  let a = (Math.atan2(z, x) * 180) / Math.PI;
+  a += 9 * Math.sin(r * 0.07) + 5 * Math.sin(x * 0.05 + z * 0.03); // ragged borders
+  if (a > 180) a -= 360;
+  if (a < -180) a += 360;
+  if (a >= -100 && a < -35) return 'outback';
+  if (a >= -165 && a < -100) return 'gum';
+  if (a >= 112 || a < -165) return 'rainforest';
+  return 'meadow';
+}
 
 // ---------- the road ----------
 export interface PathSample {
@@ -187,6 +204,8 @@ function nearRoad(x: number, z: number) {
   const k = idx(Math.round(toGrid(x)), Math.round(toGrid(z)));
   return roadDist[k] < ROAD_HALF + 6 || padMask[k] === 1;
 }
+/** True when a point is off the road, its verges and every flattened pad. */
+export const clearOfRoad = (x: number, z: number) => !nearRoad(x, z);
 
 // ---------- meshes ----------
 const C = {
@@ -197,6 +216,18 @@ const C = {
   rock: new THREE.Color('#8e8780'),
   rockDark: new THREE.Color('#6f6862'),
   snow: new THREE.Color('#f3f6fa'),
+  red: new THREE.Color('#a8573a'),
+  redDark: new THREE.Color('#934a30'),
+  dry: new THREE.Color('#9da35a'),
+  dryDark: new THREE.Color('#87904a'),
+  jungle: new THREE.Color('#3e8038'),
+  jungleDark: new THREE.Color('#2f6a2e'),
+};
+const GROUND: Record<Biome, [THREE.Color, THREE.Color]> = {
+  meadow: [C.grass, C.grassDark],
+  outback: [C.red, C.redDark],
+  gum: [C.dry, C.dryDark],
+  rainforest: [C.jungle, C.jungleDark],
 };
 
 function terrainMesh() {
@@ -218,13 +249,14 @@ function terrainMesh() {
   const r = rng(7);
   for (let t = 0; t < p.count; t += 3) {
     const y = (p.getY(t) + p.getY(t + 1) + p.getY(t + 2)) / 3;
+    const ground = GROUND[biomeAt((p.getX(t) + p.getX(t + 1) + p.getX(t + 2)) / 3, (p.getZ(t) + p.getZ(t + 1) + p.getZ(t + 2)) / 3)];
     const ny = n.getY(t);
     const jitter = r() * 0.08 - 0.04;
     if (y < -0.4) c.copy(C.sandWet);
     else if (y < 1.8) c.copy(C.sand);
     else if (y > 33 && ny > 0.62) c.copy(C.snow);
     else if (ny < 0.72 || y > 30) c.copy(r() > 0.5 ? C.rock : C.rockDark);
-    else c.copy(r() > 0.35 ? C.grass : C.grassDark);
+    else c.copy(r() > 0.35 ? ground[0] : ground[1]);
     c.offsetHSL(0, 0, jitter);
     for (let v = 0; v < 3; v++) c.toArray(colors, (t + v) * 3);
   }
@@ -378,11 +410,54 @@ function water() {
   return g;
 }
 
+// tree shapes, each a trunk and a crown merged into one geometry per part
+function treeKinds() {
+  const pine = {
+    trunk: new THREE.CylinderGeometry(0.25, 0.35, 1.6, 5).translate(0, 0.8, 0),
+    crown: new THREE.ConeGeometry(1.6, 4.2, 6).translate(0, 3.6, 0),
+    trunkColor: '#6b4a32',
+    crownColor: '#2f6f3e',
+  };
+  const gum = {
+    trunk: mergeGeometries([
+      new THREE.CylinderGeometry(0.16, 0.3, 4.4, 6).translate(0, 2.2, 0),
+      new THREE.CylinderGeometry(0.08, 0.14, 2, 5).rotateZ(0.6).translate(-0.6, 3.6, 0),
+    ]),
+    crown: mergeGeometries([
+      new THREE.IcosahedronGeometry(1.3, 0).scale(1, 0.6, 1).translate(0.3, 4.7, 0.2),
+      new THREE.IcosahedronGeometry(1, 0).scale(1, 0.6, 1).translate(-1.2, 4.4, -0.3),
+      new THREE.IcosahedronGeometry(0.9, 0).scale(1, 0.6, 1).translate(0.6, 3.8, -0.9),
+    ]),
+    trunkColor: '#e6dfd2', // pale gum bark
+    crownColor: '#7d9a6a',
+  };
+  const broadleaf = {
+    trunk: new THREE.CylinderGeometry(0.22, 0.45, 5, 6).translate(0, 2.5, 0),
+    crown: mergeGeometries([
+      new THREE.DodecahedronGeometry(2, 0).scale(1, 0.7, 1).translate(0, 5.3, 0),
+      new THREE.DodecahedronGeometry(1.2, 0).scale(1, 0.7, 1).translate(1.1, 4.4, 0.7),
+    ]),
+    trunkColor: '#5a3f2b',
+    crownColor: '#2c6a2c',
+  };
+  const fronds = [];
+  for (let i = 0; i < 7; i++) fronds.push(new THREE.BoxGeometry(2.4, 0.06, 0.5).translate(1.1, 0, 0).rotateZ(-0.35).rotateY((i / 7) * Math.PI * 2).translate(0.5, 5, 0));
+  const palm = {
+    trunk: new THREE.CylinderGeometry(0.16, 0.24, 5.2, 6).translate(0, 2.6, 0).rotateZ(-0.1),
+    crown: mergeGeometries(fronds),
+    trunkColor: '#8b7355',
+    crownColor: '#3f8a3a',
+  };
+  return { pine, gum, broadleaf, palm };
+}
+type TreeKind = keyof ReturnType<typeof treeKinds>;
+
 function trees() {
   const r = rng(42);
-  const spots: THREE.Vector3[] = [];
+  const spots: { p: THREE.Vector3; kind: TreeKind }[] = [];
   let guard = 0;
-  while (spots.length < 520 && guard++ < 20000) {
+  // the rainforest gets extra trees; the outback is mostly open
+  while (spots.length < 760 && guard++ < 40000) {
     const a = r() * Math.PI * 2;
     const rad = 20 + r() * 145;
     const x = Math.cos(a) * rad;
@@ -391,27 +466,35 @@ function trees() {
     if (y < 2.6 || y > 30) continue;
     if (normalAt(x, z).y < 0.8) continue;
     if (nearRoad(x, z)) continue;
-    spots.push(new THREE.Vector3(x, y, z));
+    const biome = biomeAt(x, z);
+    if (biome === 'outback' && r() > 0.12) continue;
+    if (biome === 'meadow' && spots.length > 520) continue;
+    if (biome === 'gum' && r() > 0.7) continue;
+    const kind: TreeKind = biome === 'rainforest' ? (y < 7 && r() > 0.4 ? 'palm' : 'broadleaf') : biome === 'meadow' ? 'pine' : 'gum';
+    spots.push({ p: new THREE.Vector3(x, y, z), kind });
   }
-  const trunkGeo = new THREE.CylinderGeometry(0.25, 0.35, 1.6, 5).translate(0, 0.8, 0);
-  const crownGeo = new THREE.ConeGeometry(1.6, 4.2, 6).translate(0, 3.6, 0);
-  const trunk = new THREE.InstancedMesh(trunkGeo, new THREE.MeshStandardMaterial({ color: '#6b4a32', flatShading: true }), spots.length);
-  const crown = new THREE.InstancedMesh(crownGeo, new THREE.MeshStandardMaterial({ color: '#2f6f3e', flatShading: true }), spots.length);
+  const g = new THREE.Group();
+  const kinds = treeKinds();
   const m = new THREE.Matrix4();
   const q = new THREE.Quaternion();
-  const s = new THREE.Vector3();
+  const sc = new THREE.Vector3();
   const col = new THREE.Color();
-  spots.forEach((p, i) => {
-    const k = 0.7 + r() * 0.8;
-    q.setFromAxisAngle(new THREE.Vector3(0, 1, 0), r() * 6.28);
-    m.compose(p, q, s.set(k, k * (0.9 + r() * 0.4), k));
-    trunk.setMatrixAt(i, m);
-    crown.setMatrixAt(i, m);
-    crown.setColorAt(i, col.set('#2f6f3e').offsetHSL(r() * 0.05 - 0.02, 0, r() * 0.1 - 0.05));
-  });
-  crown.castShadow = true;
-  const g = new THREE.Group();
-  g.add(trunk, crown);
+  for (const [name, kind] of Object.entries(kinds) as [TreeKind, (typeof kinds)[TreeKind]][]) {
+    const list = spots.filter((s) => s.kind === name);
+    if (!list.length) continue;
+    const trunk = new THREE.InstancedMesh(kind.trunk, new THREE.MeshStandardMaterial({ color: kind.trunkColor, flatShading: true }), list.length);
+    const crown = new THREE.InstancedMesh(kind.crown, new THREE.MeshStandardMaterial({ color: '#ffffff', flatShading: true }), list.length);
+    list.forEach(({ p }, i) => {
+      const k = 0.7 + r() * 0.8;
+      q.setFromAxisAngle(new THREE.Vector3(0, 1, 0), r() * 6.28);
+      m.compose(p, q, sc.set(k, k * (0.9 + r() * 0.4), k));
+      trunk.setMatrixAt(i, m);
+      crown.setMatrixAt(i, m);
+      crown.setColorAt(i, col.set(kind.crownColor).offsetHSL(r() * 0.05 - 0.02, 0, r() * 0.1 - 0.05));
+    });
+    crown.castShadow = true;
+    g.add(trunk, crown);
+  }
   return g;
 }
 
@@ -506,7 +589,7 @@ export function minimapImage(size: number) {
       else if (y < 1.8) c.copy(C.sand);
       else if (y > 33) c.copy(C.snow);
       else if (y > 26) c.copy(C.rock);
-      else c.copy(C.grass).offsetHSL(0, 0, -y * 0.006);
+      else c.copy(GROUND[biomeAt(x, z)][0]).offsetHSL(0, 0, -y * 0.006);
       const o = (py * size + px) * 4;
       const hex = c.getHex(); // sRGB
       img.data[o] = (hex >> 16) & 255;
