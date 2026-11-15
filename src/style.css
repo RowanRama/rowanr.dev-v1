@@ -10,7 +10,8 @@
   --line: #2f4250;
   --chapter: #ffb347;
   --interest: #5fd4c4;
-  --link: #8fd0ff;
+  --link: #7fe6ff;
+  --neon: #36e0ff;
   --focus: #ffd43b;
   --arm-a: #ff7a1a;
   --arm-b: #3d9bff;
@@ -90,13 +91,65 @@ ul {
   padding-left: 1.2rem;
 }
 
+/* links in running text: a faint neon underline that lights up on hover, like the road lines */
 a {
   color: var(--link);
-  text-underline-offset: 3px;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: color-mix(in srgb, var(--link) 35%, transparent);
+  text-underline-offset: 4px;
+  transition:
+    color 0.15s ease,
+    text-decoration-color 0.15s ease,
+    text-shadow 0.15s ease;
 }
 
 a:hover {
   color: var(--ink);
+  text-decoration-color: var(--neon);
+  text-shadow: 0 0 12px color-mix(in srgb, var(--neon) 60%, transparent);
+}
+
+.icon {
+  width: 1.1em;
+  height: 1.1em;
+  flex: none;
+}
+
+/* chips for code links: GitHub mark plus the repo name */
+.repos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.repo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: var(--target);
+  padding: 0 0.95rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel-solid);
+  color: var(--ink);
+  font: 600 0.9rem/1 var(--font-body);
+  text-decoration: none;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    color 0.15s ease;
+}
+
+.repo:hover {
+  border-color: var(--neon);
+  color: var(--ink);
+  text-shadow: none;
+  box-shadow: 0 0 16px color-mix(in srgb, var(--neon) 35%, transparent);
+}
+
+.repo:active {
+  transform: scale(0.97);
 }
 
 a:focus-visible,
@@ -139,11 +192,51 @@ button:focus-visible {
   margin-bottom: 0.25rem;
 }
 
-.links {
+/* contact icons at the summit */
+.social {
   list-style: none;
   padding: 0;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.social a {
   display: grid;
-  gap: 0.4rem;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--panel-solid);
+  color: var(--ink);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.social .icon {
+  width: 24px;
+  height: 24px;
+}
+
+.social a:hover {
+  border-color: var(--neon);
+  color: var(--neon);
+  text-shadow: none;
+  box-shadow: 0 0 18px color-mix(in srgb, var(--neon) 40%, transparent);
+  transform: translateY(-2px);
+}
+
+.social a:active {
+  transform: translateY(0) scale(0.96);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .social a:hover {
+    transform: none;
+  }
 }
 
 /* ---------- buttons ---------- */
