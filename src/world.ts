@@ -384,7 +384,7 @@ function sky() {
   stars.renderOrder = -1;
   const g = new THREE.Group();
   g.add(m, stars);
-  return g;
+  return { g, uniforms: mat.uniforms };
 }
 
 function water() {
@@ -562,8 +562,14 @@ export function buildWorld(scene: THREE.Scene, pads: Pad[]) {
     new THREE.MeshBasicMaterial({ color: '#7ff0ff', transparent: true, opacity: 0.3, blending: THREE.AdditiveBlending, depthWrite: false, fog: false }),
   );
   beam.position.y = heightAt(0, 0);
-  scene.add(sky(), water(), terrainMesh(), roadMesh(), trees(), rocks(), cloudLayer, ring, beam);
+  const skyDome = sky();
+  const sea = water();
+  scene.add(skyDome.g, sea, terrainMesh(), roadMesh(), trees(), rocks(), cloudLayer, ring, beam);
   return {
+    skyUniforms: skyDome.uniforms,
+    beam,
+    /** everything that isn't the island itself (sky, sea, clouds, the orbital ring) */
+    offIsland: [skyDome.g, sea, cloudLayer, ring] as THREE.Object3D[],
     update(dt: number) {
       cloudLayer.rotation.y += dt * 0.004;
       ring.rotation.y += dt * 0.03;

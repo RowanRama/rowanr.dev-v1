@@ -100,9 +100,11 @@ export function createPlayer(scene: THREE.Scene, colliders: Collider[]) {
     place(1);
   }
 
-  /** The arm idles, or turns to face a station and waves. */
-  function animateArm(dt: number, time: number, look: THREE.Vector3 | null) {
-    if (look) {
+  /** The arm idles, or turns to face a station and waves; an override drives it to set joint angles instead. */
+  function animateArm(dt: number, time: number, look: THREE.Vector3 | null, override?: { q: number[]; rate: number } | null) {
+    if (override) {
+      qGoal.splice(0, 6, ...override.q);
+    } else if (look) {
       tmp.copy(look);
       amr.arm.root.worldToLocal(tmp);
       const yaw = Math.atan2(-tmp.z, tmp.x);
@@ -110,7 +112,7 @@ export function createPlayer(scene: THREE.Scene, colliders: Collider[]) {
     } else {
       qGoal.splice(0, 6, Math.sin(time * 0.4) * 0.4, 0.35 + Math.sin(time * 0.7) * 0.08, 1.55, 0, 1.0 + Math.sin(time) * 0.1, 0);
     }
-    const k = 1 - Math.exp(-dt * 3);
+    const k = 1 - Math.exp(-dt * (override?.rate ?? 3));
     for (let i = 0; i < 6; i++) {
       let d = qGoal[i] - q[i];
       if (i === 0) d = Math.atan2(Math.sin(d), Math.cos(d));

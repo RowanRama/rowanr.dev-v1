@@ -737,3 +737,72 @@ html.is-3d:not(.text-mode) .demo[hidden] {
   display: grid;
   gap: 0.6rem;
 }
+
+/* Herald easter egg: the summit sequence hides the HUD, then fades to the raft and its card */
+.egg-on:not(.text-mode) :is(.timeline, .hud-bottom, #stations, #joystick) {
+  visibility: hidden;
+}
+
+.egg-fade,
+.egg-end {
+  position: fixed;
+  inset: 0;
+  z-index: 15;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.egg-fade {
+  background: #000;
+}
+
+.egg-end {
+  display: grid;
+  place-items: end center;
+  /* at the bottom, leaving the raft and the hat in view */
+  padding: var(--gutter) var(--gutter) max(24px, env(safe-area-inset-bottom));
+  transition-duration: 1.6s;
+}
+
+.egg-fade.on,
+.egg-end.on {
+  opacity: 1;
+}
+
+.egg-end.on .egg-card {
+  pointer-events: auto;
+}
+
+.text-mode .egg-fade,
+.text-mode .egg-end {
+  display: none;
+}
+
+.egg-card {
+  max-width: 28rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.4rem 1.5rem 1.5rem;
+  text-align: center;
+}
+
+.egg-card h2 {
+  margin: 0 0 0.6rem;
+  font: 700 1.6rem/1.2 var(--font-display);
+  color: #ff7a4a;
+}
+
+.egg-card p {
+  margin: 0 0 0.8rem;
+  color: var(--ink-muted);
+}
+
+.egg-card .btn {
+  margin-top: 0.4rem;
+}
+
+.egg-end:not(.on) {
+  visibility: hidden;
+}

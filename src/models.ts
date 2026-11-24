@@ -48,6 +48,8 @@ export interface Arm {
   set(q: number[]): void;
   /** Point the tool straight down at a target in the arm's root frame. Returns false if out of reach. */
   reachDown(target: THREE.Vector3): boolean;
+  /** Joint angles that put the tool straight down at a target in the arm's root frame (clamped to reach). */
+  solveDown(target: THREE.Vector3): number[];
 }
 
 export function createArm(style: ArmStyle): Arm {
@@ -116,7 +118,7 @@ export function createArm(style: ArmStyle): Arm {
     j6.rotation.y = q[5];
   };
 
-  const reachDown = (t: THREE.Vector3) => {
+  const solveDown = (t: THREE.Vector3) => {
     const yaw = Math.atan2(-t.z, t.x);
     const x = Math.hypot(t.x, t.z);
     const y = t.y + LT - S; // wrist centre above the target, relative to the shoulder
@@ -128,11 +130,15 @@ export function createArm(style: ArmStyle): Arm {
     const p2 = Math.acos(c2);
     const alpha = Math.atan2(x, y);
     const p1 = alpha - Math.atan2(L2 * Math.sin(p2), L1 + L2 * Math.cos(p2));
-    set([yaw, p1, p2, 0, Math.PI - p1 - p2, 0]);
+    return { q: [yaw, p1, p2, 0, Math.PI - p1 - p2, 0], ok };
+  };
+  const reachDown = (t: THREE.Vector3) => {
+    const { q, ok } = solveDown(t);
+    set(q);
     return ok;
   };
 
-  return { root, joints, tip, S, L1, L2, LT, set, reachDown };
+  return { root, joints, tip, S, L1, L2, LT, set, reachDown, solveDown: (t: THREE.Vector3) => solveDown(t).q };
 }
 
 // ---------- AMR with an industrial arm on top ----------

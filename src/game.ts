@@ -3,6 +3,7 @@ import { createHud, createInput, createScrollTour, readArticles, type Mode } fro
 import { createCameraRig, createPlayer } from './player';
 import { buildRoadside } from './roadside';
 import { buildFleet } from './fleet';
+import { createHeraldEgg } from './herald';
 import { buildHeritage, heritagePads } from './heritage';
 import { buildStations, stationPads, type Station } from './stations';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
@@ -76,6 +77,7 @@ export async function startGame() {
   const player = createPlayer(scene, colliders);
   const rig = createCameraRig(camera);
   const tour = createScrollTour(stops);
+  const egg = createHeraldEgg({ scene, camera, player, stations, world, keep: [sun.target], skyFog, coarse, reduceMotion });
 
   let mode: Mode = coarse ? 'tour' : 'drive';
   let tourU = 0;
@@ -95,14 +97,16 @@ export async function startGame() {
     }
   }
 
+  const hintEl = document.getElementById('hint')!;
+  const baseHint = () => (mode === 'drive' ? 'WASD to drive, Shift to boost, drag to look around' : 'Scroll to move along the road');
+
   function setMode(next: Mode) {
     mode = next;
     root.classList.toggle('tour', mode === 'tour');
     root.classList.toggle('drive', mode === 'drive');
     modeBtn.textContent = mode === 'tour' ? 'Drive mode' : 'Tour mode';
     document.getElementById('joystick')!.hidden = !(mode === 'drive' && coarse);
-    document.getElementById('hint')!.textContent =
-      mode === 'drive' ? 'WASD to drive, Shift to boost, drag to look around' : 'Scroll to move along the road';
+    hintEl.textContent = baseHint();
     if (mode === 'tour') {
       const u = nearestU(player.state.x, player.state.z);
       tourU = u;
@@ -171,7 +175,7 @@ export async function startGame() {
 
   const timer = new THREE.Timer();
   let freeCam: { pos: THREE.Vector3; look: THREE.Vector3 } | null = null;
-  if (import.meta.env.DEV) Object.assign(window, { __dbg: { camera, scene, player, stations, setFreeCam: (v: typeof freeCam) => (freeCam = v) } });
+  if (import.meta.env.DEV) Object.assign(window, { __dbg: { camera, scene, player, stations, egg, setFreeCam: (v: typeof freeCam) => (freeCam = v) } });
   let time = 0;
   let first = true;
   let idle = 0;
@@ -184,7 +188,9 @@ export async function startGame() {
     const ambient = reduceMotion.matches ? 0.35 : 1;
     time += dt * ambient;
 
-    if (mode === 'drive') {
+    if (egg.locked) {
+      // the summit sequence has the AMR
+    } else if (mode === 'drive') {
       player.drive(dt, readInput());
     } else {
       const target = tour.progress();
@@ -195,7 +201,9 @@ export async function startGame() {
     // the nearest stop opens its card
     const p = player.position;
     let near: Station | null = null;
-    if (mode === 'tour') {
+    if (egg.locked) {
+      near = null;
+    } else if (mode === 'tour') {
       near = stops.reduce((m, s) => (Math.abs(s.u - tourU) < Math.abs(m.u - tourU) ? s : m));
     } else {
       let best = 18;
@@ -213,7 +221,7 @@ export async function startGame() {
       s.update(dt * ambient, time, isNear);
       (s.ring.material as THREE.MeshBasicMaterial).opacity = isNear ? 0.85 : 0.45;
     }
-    player.animateArm(dt, time, near ? lookAt.copy(near.group.position).setY(near.group.position.y + 3) : null);
+    player.animateArm(dt, time, near ? lookAt.copy(near.group.position).setY(near.group.position.y + 3) : null, egg.armOverride);
     world.update(dt * ambient);
     fleet.update(dt * ambient, time);
     heritage.update(dt * ambient, time);
@@ -231,14 +239,18 @@ export async function startGame() {
         if (Math.abs(orbit.yaw) < 1e-3 && Math.abs(orbit.pitch) < 1e-3) orbit.yaw = orbit.pitch = 0;
       }
     }
-    rig.update(dt, player, mode, parked && near ? near.group.position : null, orbit);
+    if (!egg.locked) rig.update(dt, player, mode, parked && near ? near.group.position : null, orbit);
+    player.amr.root.updateMatrixWorld(true);
+    egg.update(dt, time, mode);
+    const hint = egg.hint() ?? baseHint();
+    if (hintEl.textContent !== hint) hintEl.textContent = hint;
     if (freeCam) {
       camera.position.copy(freeCam.pos);
       camera.lookAt(freeCam.look);
     }
     const under = camera.position.y < SEA;
     scene.fog = under ? seaFog : skyFog;
-    renderer.setClearColor(under ? '#0f6275' : SKY_HORIZON);
+    renderer.setClearColor(under ? '#0f6275' : skyFog.color);
     sun.position.copy(p).add(new THREE.Vector3(90, 70, 30));
     sun.target.position.copy(p);
     if (innerWidth >= 900) hud.drawMinimap(p.x, p.z, player.state.heading);
